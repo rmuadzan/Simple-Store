@@ -1,0 +1,68 @@
+{{ define "addProduct"}}
+{{ template "_header" }}
+
+<div class="container">
+  <h1 class="mt-3 text-center">Edit Product</h1>
+  <form action="/my-products" method="POST" class="row g-3 my-4 justify-content-center mx-auto" style="width: 80%;">
+    <input type="hidden" name="id">
+    <div class="col-md-7">
+      <label for="inputTitle" class="form-label">Title</label>
+      <input type="text" class="form-control" id="inputTitle" name="title" required>
+    </div>
+    <div class="col-7">
+      <label for="inputBrand" class="form-label">Brand</label>
+      <input type="text" class="form-control" id="inputBrand" name="brand">
+    </div>
+    <div class="col-7">
+      <label for="inputCategory" class="form-label">Category</label>
+      <input type="text" class="form-control" id="inputCattegory" name="category">
+    </div>
+    <div class="col-7">
+      <label for="inputPrice" class="form-label">Price</label>
+      <input type="text" class="form-control" id="inputPrice" name="price" required>
+    </div>
+    <div class="col-7">
+      <label for="inputStock" class="form-label">Stock</label>
+      <input type="text" class="form-control" id="inputStock" name="stock">
+    </div>
+    <div class="col-7">
+      <label for="inputDiscountPercentage" class="form-label">Discount Percentage</label>
+      <input type="text" class="form-control" id="inputDiscountPercentage" name="discountPercentage">
+    </div>
+    <div class="col-7">
+      <label for="inputDescription" class="form-label">Description</label>
+      <textarea class="form-control" id="inputDescription" rows="5" name="description" placeholder="Your product description..."></textarea>
+    </div>
+    <div class="col-7">
+      <label for="inputThumbnail" class="form-label">Thumbnail (URL)</label>
+      <input type="text" class="form-control" id="inputThumbnail" name="thumbnail">
+    </div>
+    <p class="h6 text-center">Images (URL) :</p>
+    <div class="col-6">
+      <label for="inputImage1" class="form-label">Image 1</label>
+      <input type="text" class="form-control" id="inputImage1" name="images">
+    </div>
+    <div class="col-6">
+      <label for="inputImage2" class="form-label">Image 2</label>
+      <input type="text" class="form-control" id="inputImage2" name="images">
+    </div>
+    <div class="col-6">
+      <label for="inputImage3" class="form-label">Image 3</label>
+      <input type="text" class="form-control" id="inputImage3" name="images">
+    </div>
+    <div class="col-6">
+      <label for="inputImage4" class="form-label">Image 4</label>
+      <input type="text" class="form-control" id="inputImage4" name="images">
+    </div>
+    <div class="col-6">
+      <label for="inputImage5" class="form-label">Image 5</label>
+      <input type="text" class="form-control" id="inputImage" name="images">
+    </div>
+    <div class="col-12 text-center">
+      <button type="submit" class="btn btn-primary" onclick="this.disabled = true;this.value='Adding...'; this.form.submit();">Add</button>
+    </div>
+  </form>
+</div>
+  
+{{ template "_footer"}}
+{{ end }}

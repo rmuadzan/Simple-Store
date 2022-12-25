@@ -1,0 +1,67 @@
+{{define "index"}}
+{{template "_header"}}
+
+<div class="container-fluid m-0 mb-5" style="height: 900px;">
+    <div class="row justify-content-lg-center align-items-center bg-success bg-opacity-75 text-white shadow " style="height: 450px;">
+        <div class="col-4">
+            {{ if eq .Status "store"}}
+                <p>Jualan goblok</p>
+            {{ end }}
+            {{ if .IsLogged }}
+                <p>HI, {{ .Fullname }}</p>
+            {{ end }}
+            <p class="fw-light">We provide all the products you want</p>
+            <br>
+            <a href="/products" class="btn btn-success me-4">See Products >></a>
+            <a href="/about" class="btn btn-secondary">About Page</a>
+            <br><br><br><br>
+        </div>
+        <div class="col-6 text-center">
+            <h1>WARUNG<br>KAKI<br>SERIBU</h1>
+            <br><br><br><br>
+        </div>
+    </div>
+    <div class="row justify-content-lg-center align-items-center mt-5" style="height: 400px;">
+        <div class="col-6 text-center">
+            <br><br>
+            <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg>
+            <h1 class="text-success mt-2">WARUNG KAKI SERIBU</h1>
+            <br><br><br><br>
+        </div>
+        <div class="col-4">
+            {{ if .IsLogged }}
+                {{ if eq .Status "store"}}
+                    <p class="fs-5">Add your product now!</p>
+                    <br>
+                    <a href="/product/add" class="btn btn-primary me-4">Add Product</a>
+                    <p class="d-inline me-4">OR</p>
+                    <a href="/logout" class="btn btn-info">Log Out</a>
+                {{ else if eq .Status "user" }}
+                    <p class="fs-5">Find the best products for you!</p>
+                    <br>
+                    <a href="/products" class="btn btn-primary me-4">See Products</a>
+                    <p class="d-inline me-4">OR</p>
+                    <a href="/logout" class="btn btn-info">Log Out</a>
+                {{ else }}
+                    <p class="fs-5">Manage products.</p>
+                    <br>
+                    <a href="/products" class="btn btn-primary me-4">See Products</a>
+                    <p class="d-inline me-4">OR</p>
+                    <a href="/logout" class="btn btn-info">Log Out</a>
+                {{ end }}
+            {{ else }}
+                <p class="fs-5">Join to add your product</p>
+                <br>
+                <a href="/login" class="btn btn-primary me-4">Login</a>
+                <p class="d-inline me-4">OR</p>
+                <a href="/signup" class="btn btn-info">Sign Up</a>
+            {{ end }}
+            <br><br><br><br>
+        </div>
+    </div>
+</div>
+
+{{template "_footer"}}
+{{end}}

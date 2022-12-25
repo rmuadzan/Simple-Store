@@ -1,0 +1,66 @@
+{{ define "allProducts"}}
+{{ template "_header" }}
+
+    <main>
+      <div class="container">
+        <div class="row my-4">
+          {{ if eq .UserStatus "store" }}
+            <div class="col-2 ms-auto">
+              <a href="/products/add" class="btn btn-primary h6">+ Add Product</a>
+            </div>
+          {{ end}}
+        </div>
+      </div>
+      <div class="row my-3 text-center">
+        <h3 class="">----- All Products -----</h3>
+      </div>
+      {{ if lt .Length 1 }}
+        <div class="container-fluid justify-content-center text-center" style="height: 500px;">
+          <div class="row align-items-center" style="height: 400px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="250" height="250" fill="currentColor" class="bi bi-cart-x" viewBox="0 0 16 16">
+              <path d="M7.354 5.646a.5.5 0 1 0-.708.708L7.793 7.5 6.646 8.646a.5.5 0 1 0 .708.708L8.5 8.207l1.146 1.147a.5.5 0 0 0 .708-.708L9.207 7.5l1.147-1.146a.5.5 0 0 0-.708-.708L8.5 6.793 7.354 5.646z"/>
+              <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg>
+          </div>
+          <div class="row">
+              <p class="fs-3 fst-italic">No product match</p>
+          </div>
+        </div>
+      {{ else }}
+        <div class="row justify-content-center mb-5">
+          {{ range $product := .Products}}
+            <div class="card mx-1 my-2" style="width: 18rem;">
+              <img src="{{ $product.Thumbnail }}" class="card-img-top img-responsive" alt="..." style="height: 150px;">
+              <div class="card-body pt-1">
+                <div class="row justify-content-lg-center align-items-center" style="height: 85px;">
+                  <div class="col text-center m-0">
+                    {{ if gt $product.DiscountPercentage 0.0 }}
+                        <p class="text-decoration-line-through fst-italic mt-0 mb-1 p-0">$ {{ $product.Price }} </p>
+                        <h4 class="justify-content-center mt-0 p-0">$ {{ $product.FPrice }}</h4>
+                    {{ else }}
+                        <h4 class="justify-content-top ">${{ $product.Price }}</h4>
+                    {{ end }}
+                  </div>
+                  <div class="col text-center" style="overflow: hidden;">
+                    <div class="card-title mt-0 d-inline-block text-capitalize overflow-wrap" style="height: 40px;">{{ $product.Title }}</div>
+                    <div class="row justify-content-lg-center align-items-center text-success">{{ $product.StoreName }}</div>
+                  </div>
+                </div>
+                <div class="row">
+                  <a href="products/{{ $product.Id }}" class="btn btn-primary d-inline-block mt-auto">Lihat Produk</a>
+                </div>
+              </div>
+            </div>
+          {{ end }}
+        </div>
+
+        <section class="mb-3 d-flex flex-column mt-auto">
+          <div class="row row-cols-auto justify-content-center mx-2">
+
+          </div>
+        </section>
+      {{ end }}
+    </main>
+
+{{ template "_footer"}}
+{{ end }}

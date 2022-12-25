@@ -1,0 +1,54 @@
+{{ define "editProduct"}}
+{{ template "_header" }}
+
+<div class="container">
+  <h1 class="mt-3 text-center">Edit Product</h1>
+  <form method="POST" action="/products/{{ .Id }}" class="row g-3 my-4 justify-content-center mx-auto" style="width: 80%;">
+    <input type="hidden" name="id" value="{{ .Id }}">
+    <div class="col-md-7">
+      <label for="inputTitle" class="form-label">Title</label>
+      <input type="text" class="form-control" id="inputTitle" name="title" value="{{ .Title }}" required>
+    </div>
+    <div class="col-7">
+      <label for="inputBrand" class="form-label">Brand</label>
+      <input type="text" class="form-control" id="inputBrand" name="brand" value="{{ .Brand }}">
+    </div>
+    <div class="col-7">
+      <label for="inputCategory" class="form-label">Category</label>
+      <input type="text" class="form-control" id="inputCattegory" name="category" value="{{ .Category }}">
+    </div>
+    <div class="col-7">
+      <label for="inputPrice" class="form-label">Price</label>
+      <input type="text" class="form-control" id="inputPrice" name="price" value="{{ .Price }}" required>
+    </div>
+    <div class="col-7">
+      <label for="inputStock" class="form-label">Stock</label>
+      <input type="text" class="form-control" id="inputStock" name="stock" value="{{ .Stock }}">
+    </div>
+    <div class="col-7">
+      <label for="inputDiscountPercentage" class="form-label">Discount Percentage</label>
+      <input type="text" class="form-control" id="inputDiscountPercentage" name="discountPercentage" value="{{ .DiscountPercentage }}">
+    </div>
+    <div class="col-7">
+      <label for="inputDescription" class="form-label">Description</label>
+      <textarea class="form-control" id="inputDescription" rows="5" name="description">{{ .Description }}</textarea>
+    </div>
+    <div class="col-7">
+      <label for="inputThumbnail" class="form-label">Thumbnail (URL)</label>
+      <input type="text" class="form-control" id="inputThumbnail" name="thumbnail" value="{{ .Thumbnail }}">
+    </div>
+    <p class="h6 text-center">Images (URL) :</p>
+    {{ range $i, $image := .Images }}
+      <div class="col-6">
+        <label for="inputImage{{$i}}" class="form-label">Image {{ ($i) }}</label>
+        <input type="text" class="form-control" id="inputImage{{$i}}" name="image{{$i}}" value="{{ $image }}">
+      </div>
+    {{ end }}
+    <div class="col-12 text-center">
+      <button type="submit" class="btn btn-primary">Ubah</button>
+    </div>
+  </form>
+</div>
+
+{{ template "_footer"}}
+{{ end }}
