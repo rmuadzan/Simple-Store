@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"fmt"
 	"net/http"
 	"simple-catalog-v2/repositories"
 
@@ -20,6 +21,7 @@ func MiddlewareJWTAuthorization(next echo.HandlerFunc) echo.HandlerFunc {
 
 		claims, err := repositories.GetUserClaims(token)
 		if err != nil {
+			fmt.Println("gagal")
 			return ctx.Redirect(http.StatusSeeOther, "/logout")
 		}
 

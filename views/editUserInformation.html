@@ -23,10 +23,6 @@
             <input type="text" class="form-control" id="inputUsername" name="username" value="{{ .Username }}" required>
           </div>
           <div class="col-md-7">
-            <label for="inputEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="inputEmail" name="email" value="{{ .Email }}" required>
-          </div>
-          <div class="col-md-7">
             <label for="inputGender" class="form-label">Gender</label>
             <select name="gender" id="inputGender" required>
               {{ if eq .Gender "male" }}

@@ -4,15 +4,29 @@ import (
 	"net/http"
 	"simple-catalog-v2/models"
 	"simple-catalog-v2/repositories"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
 
 func AllProductsHandler(ctx echo.Context) error {
-	products, err := repositories.GetAllProducts()
+	page, _ := strconv.Atoi(ctx.QueryParam("page"))
+	if page <= 0 {
+		page = 1
+	}
+	perPage := 20
+	
+	products, totalRows, err := repositories.GetAllProducts(page, perPage)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
+
+	pagination, _ := repositories.GetPaginationLinks(models.PaginationParams{
+		Path:        "products",
+		TotalRows:   totalRows,
+		PerPage:     perPage,
+		CurrentPage: page,
+	})
 
 	productsDataSlice := []*models.DisplayProductData{}
 	for i := 0; i < len(*products); i++ {
@@ -33,11 +47,13 @@ func AllProductsHandler(ctx echo.Context) error {
 		Products *[]*models.DisplayProductData
 		Length int
 		UserStatus string
+		Pagination models.PaginationLinks
 	}{}
 
 	data.Products = &productsDataSlice
 	data.Length = len(*products)
 	data.UserStatus = userInfo.Status
+	data.Pagination = pagination
 
 	return ctx.Render(http.StatusOK, "allProducts", data)
 }

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+	"simple-catalog-v2/connect"
 	"simple-catalog-v2/controllers"
 	"simple-catalog-v2/middlewares"
 	"simple-catalog-v2/models"
@@ -16,6 +18,25 @@ func main() {
 	e.HTTPErrorHandler = repositories.ErrorHandler
 	e.Validator = &models.CustomValidator{Validator: validator.New()}
 
+	err := connect.MySqlConnect().AutoMigrate(&models.User{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = connect.MySqlConnect().AutoMigrate(&models.Product{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = connect.MySqlConnect().AutoMigrate(&models.Images{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// err = PopulateProduct()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	e.Use(middlewares.MiddlewareContextValue)
 	e.Use(middlewares.MiddlewareJWTAuthorization)
@@ -30,6 +51,7 @@ func main() {
 	e.GET("/products", controllers.AllProductsHandler)
 	e.GET("/my-products", controllers.UserProductsHandler)
 	e.POST("/my-products", controllers.CreateProductHandler)
+	e.GET("/my-cart", nil)
 	e.GET("/products/add", controllers.AddProductHandler)
 	e.GET("/products/:id", controllers.GetProductByIdHandler)
 	e.POST("/products/:id", controllers.UpdateProductByIdHandler)

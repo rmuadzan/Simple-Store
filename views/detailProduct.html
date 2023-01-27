@@ -25,9 +25,9 @@
                     </form>
                 {{ else if eq .UserStatus "user" }}
                     <form method="GET" action="" class="d-inline col-2">
-                        <button type="submit" class="btn btn-success" style="width: auto; height:40px" onclick="return confirm('sure?')">
+                        <a href="/my-order" class="btn btn-success" style="width: auto; height:40px">
                             <p>+ Beli</p>
-                        </button>     
+                        <a>     
                     </form>
                 {{ end }}
             </div>
@@ -36,7 +36,6 @@
                     <td class="col-2"><p class="h5">Price</p></td>
                     {{ if gt .Product.DiscountPercentage 0.0 }}
                         <td class="col d-flex"><p class="h5">:&emsp; $ {{ .Product.FPrice }} &emsp;</p> <p class="text-decoration-line-through fst-italic"> $ {{ .Product.Price }}</p></td>
-                        <!-- <td class="col"><p></p></td> -->
                     {{ else }}
                         <td class="col-10"><p class="h5">:&emsp; $ {{ .Product.Price }}</p></td>
                     {{ end }}
@@ -74,7 +73,7 @@
     <div class="row mt-0 mb-5 justify-content-md-center">
         {{ range $img := .Product.Images }}
             <div class="col-2">
-                <img src="{{ $img }}" alt="" class="" style="width: 100%;">
+                <img src="{{ $img.Link }}" alt="" class="" style="width: 100%;">
             </div>
         {{ end }}
     </div>

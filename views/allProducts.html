@@ -56,9 +56,12 @@
 
         <section class="mb-3 d-flex flex-column mt-auto">
           <div class="row row-cols-auto justify-content-center mx-2">
-
+            {{ range $i, $link := .Pagination.Links }}
+                <a href="{{ $link.Url }}" class="col border border-top ms-2 text-decoration-none text-reset">{{ $link.Page }}</a>
+            {{ end }}
           </div>
         </section>
+        
       {{ end }}
     </main>
 
