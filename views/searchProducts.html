@@ -15,41 +15,6 @@
           <input type="text" name="title" id="searchBar" value="{{ .Title }}" class="col-4 me-3">
           <button type="submit" class="btn btn-primary col-1">Find</button>
         </div>
-        <div class="row">
-          <div class="col-2">
-            <p>Sort by : </p>
-          </div>
-          <div class="col-2">
-            <div class="row">
-              <input type="checkbox" name="sort" value="title" id="sortTitleAZ" class="sort col-1">
-              <label for="sortTitleAZ" class="col">Title (A-Z)</label>
-            </div>
-            <div class="row">
-              <input type="checkbox" name="sort" value="-title" id="sortTitleZA" class="sort col-1">
-              <label for="sortTitleZA" class="col">Title (Z-A)</label>
-            </div>
-          </div>
-          <div class="col-2">
-            <div class="row">
-              <input type="checkbox" name="sort" value="-price" id="sortLowestPrice" class="sort col-1">
-              <label for="sortLowestPrice" class="col">Lowest Price</label>
-            </div>
-            <div class="row">
-              <input type="checkbox" name="sort" value="price" id="sortHighestPrice" class="sort col-1">
-              <label for="sortHighestPrice" class="col">Highest Price</label>
-            </div>
-          </div>
-          <div class="col-2 ps-5 d-grid justify-content-center" style="border-left: 1px solid gray;">
-            <div class="row">
-              <input type="checkbox" name="sd" value="createdAt" id="sortNewest" class="col-2">
-              <label for="sortNewest" class="col-10">Newest</label>
-            </div>
-            <div class="row">
-              <input type="checkbox" name="sd" value="-createdAt" id="sortOldest" class="col-2">
-              <label for="sortOldest" class="col-10">Oldest</label>
-            </div>
-          </div>
-        </div>
       </form>
     </div>
     <div class="row mb-3 text-center" style="margin-top: 60px;">
@@ -91,7 +56,15 @@
               </div>
             </div>
           </div>
-        {{ end }}
+          {{ end }}
+
+          <section class="mb-3 d-flex flex-column mt-auto">
+            <div class="row row-cols-auto justify-content-center mx-2">
+              {{ range $i, $link := .Pagination.Links }}
+                  <a href="{{ $link.Url }}" class="col border border-top ms-2 text-decoration-none text-reset">{{ $link.Page }}</a>
+              {{ end }}
+            </div>
+          </section>
       </div>
     {{ end }} 
   </main>

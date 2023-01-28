@@ -80,8 +80,11 @@ func GetAllProducts(page int, perPage int) (*[]*models.Product, int, error) {
 	return &result, int(count), err
 }
 
-func GetUserProducts(userID int) (*[]*models.Product, error) {
+func GetUserProducts(userID int, page int, perPage int) (*[]*models.Product, int, error) {
 	var result []*models.Product
+	var count int64
+
+	skip := (page - 1) * perPage
 
 	// cursor, err := colllection.Find(context.TODO(), bson.D{{Key: "userID", Value: userID}})
 	// if err != nil {
@@ -103,12 +106,17 @@ func GetUserProducts(userID int) (*[]*models.Product, error) {
 	// 	return nil, err
 	// }
 
-	err := db.Debug().Model(&models.Product{}).Where("user_id = ?", userID).Find(&result).Error
+	err := db.Debug().Model(&models.Product{}).Count(&count).Error
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	return &result, nil	
+	err = db.Debug().Model(&models.Product{}).Where("user_id = ?", userID).Limit(perPage).Offset(skip).Find(&result).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return &result, int(count), nil	
 }
 
 func GetProductById(id int) (models.Product, error) {
@@ -191,7 +199,7 @@ func DeleteProductById(id int) error {
 	return err
 }
 
-func SearchProductByTitle(title string) (*[]*models.Product, error) {
+func SearchProductByTitle(title string, page int, perPage int) (*[]*models.Product, int, error) {
 	// if title == "" {
 	// 	products, err := GetAllProducts()
 	// 	return products, err
@@ -224,11 +232,23 @@ func SearchProductByTitle(title string) (*[]*models.Product, error) {
 	// if err := cursor.Err();  err != nil {
 	// 	return nil, err
 	// }
-	
-	titleLike := "%" + title + "%"
-	err := db.Debug().Model(&models.Product{}).Where("title LIKE ?", titleLike).Find(&result).Error
 
-	return &result, err
+	var count int64
+	skip := (page - 1) * perPage
+
+	err := db.Debug().Model(&models.Product{}).Count(&count).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	titleLike := "%" + title + "%"
+	err = db.Debug().Model(&models.Product{}).Where("title LIKE ?", titleLike).Limit(perPage).Offset(skip).Find(&result).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	
+
+	return &result, int(count), err
 }
 
 func UpdateProductStock(id int, quantity int) error {

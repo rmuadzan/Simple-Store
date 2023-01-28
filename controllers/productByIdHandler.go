@@ -15,8 +15,6 @@ func CreateProductHandler(ctx echo.Context) error {
 	if err := ctx.Bind(data); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-	data.Init()
-	data.FPrice = float64(int(data.Price * (1 - data.DiscountPercentage / 100.0) * 100)) / 100
 	data.UserID = repositories.GetUserClaimsFromContext(ctx).Id
 
 	if err := repositories.CreateProduct(data); err != nil {

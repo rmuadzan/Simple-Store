@@ -35,7 +35,6 @@ func PopulateProduct() error{
 		product.UserID = rand.Intn(11 - 2) + 2
 		// product.UserID = 1
 		product.FPrice = product.Price * (100 - product.DiscountPercentage) / 100
-		product.Init()
 		err := repositories.CreateProduct(&product)
 		if err != nil {
 			panic(err)

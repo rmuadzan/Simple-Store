@@ -1,9 +1,6 @@
 package models
 
-import (
-	"fmt"
-	"strconv"
-)
+import "gorm.io/gorm"
 
 type Product struct {
 	Id                 int `json:"-" bson:"id" form:"id" gorm:"size:10;not null;primary_key;autoIncrement"`
@@ -23,13 +20,13 @@ type Product struct {
 	FPrice             float64  `json:"fPrice" bson:"fPrice" form:"fPrice" gorm:"not null;type:decimal(16,2)"`
 }
 
-func (p *Product) Init() {
-	fPrice := p.Price * (100 - p.DiscountPercentage) / 100
-	fPrice_string := fmt.Sprintf("%.2f", fPrice)
-	p.FPrice, _ = strconv.ParseFloat(fPrice_string, 64)
+func (p *Product) BeforeCreate(tx *gorm.DB) (err error) {  
+	p.FPrice = p.Price * (100 - p.DiscountPercentage) / 100
 	for _, img := range p.ImagesTemp {
 		p.Images = append(p.Images, Images{Link: img})
 	}
+
+	return
 }
 
 type DisplayProductData struct {

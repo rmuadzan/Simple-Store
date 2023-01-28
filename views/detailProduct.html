@@ -24,7 +24,12 @@
                         </button>     
                     </form>
                 {{ else if eq .UserStatus "user" }}
-                    <a href="/products/{{ .Product.Id }}/order" class="col-2 btn btn-success mx-2" style="width: auto; height:40px">+ Order<a>     
+                    {{ if eq .Product.Stock 0 }}
+                        <p style="display: inline-block;">Stock empty</p>
+                        <a href="" class="col-2 btn btn-success mx-2 opacity-75" style="width: auto; height:40px">+ Order<a>    
+                    {{ else }}
+                        <a href="/products/{{ .Product.Id }}/order" class="col-2 btn btn-success mx-2" style="width: auto; height:40px">+ Order<a>    
+                    {{ end}}
                 {{ end }}
             </div>
             <table class="table table-md table-borderless">

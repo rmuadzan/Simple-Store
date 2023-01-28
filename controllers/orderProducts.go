@@ -28,21 +28,37 @@ func AddOrderProduct(ctx echo.Context) error {
 // Get /my-order
 func UserOrderHandler(ctx echo.Context) error {
 	userInfo := repositories.GetUserClaimsFromContext(ctx)
-	orders, err := repositories.GetUserOrders(userInfo.Id)
+
+	page, _ := strconv.Atoi(ctx.QueryParam("page"))
+	if page <= 0 {
+		page = 1
+	}
+	perPage := 20
+
+	orders, totalRows, err := repositories.GetUserOrders(userInfo.Id, page, perPage)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
+
+	pagination, _ := repositories.GetPaginationLinks(models.PaginationParams{
+		Path:        "my-order",
+		TotalRows:   totalRows,
+		PerPage:     perPage,
+		CurrentPage: page,
+	})
 
 
 	data := struct{
 		Orders *[]*models.Order
 		Length int
 		UserStatus string
+		Pagination models.PaginationLinks
 	}{}
 
 	data.Orders = orders
 	data.Length = len(*orders)
 	data.UserStatus = userInfo.Status
+	data.Pagination = pagination
 
 	return ctx.Render(http.StatusOK, "userOrder", data)
 }

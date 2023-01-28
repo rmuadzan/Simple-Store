@@ -8,15 +8,22 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-func GetUserOrders(userID int) (*[]*models.Order, error) {
+func GetUserOrders(userID int, page int, perPage int) (*[]*models.Order, int, error) {
 	var result []*models.Order
+	var count int64
+	skip := (page - 1) * perPage
 
-	err := db.Debug().Model(&models.Order{}).Where("user_id = ?", userID).Preload("Product").Find(&result).Error
+	err := db.Debug().Model(&models.Order{}).Count(&count).Error
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	return &result, nil
+	err = db.Debug().Model(&models.Order{}).Where("user_id = ?", userID).Preload("Product").Limit(perPage).Offset(skip).Find(&result).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return &result, int(count), nil
 }
 
 func CreateOrder(data *models.Order) error {

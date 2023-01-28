@@ -28,11 +28,11 @@ func (o *Order) BeforeCreate(tx *gorm.DB) (err error) {
 		err = errors.New("sorry, invalid quantity. this happens because the quantity inputed exceeds the existing stock or less than 0")
 	}
 	return
-  }
+}
   
-  func (o *Order) AfterCreate(tx *gorm.DB) (err error) {
+func (o *Order) AfterCreate(tx *gorm.DB) (err error) {
 	if o.Status == "paid" {
 		err = tx.Debug().Model(&Product{}).Where("id = ?", o.ProductID).Update("stock", gorm.Expr("stock - ?", o.Quantity)).Error
 	}
 	return
-  }
+}
