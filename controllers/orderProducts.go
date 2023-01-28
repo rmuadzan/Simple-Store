@@ -19,7 +19,7 @@ func AddOrderProduct(ctx echo.Context) error {
 	product, err := repositories.GetProductById(id)
 	if err != nil {
 		notFoundMessage := fmt.Sprintf("No product match with id %d", id)
-		return echo.NewHTTPError(http.StatusInternalServerError, notFoundMessage)
+		return echo.NewHTTPError(http.StatusNotFound, notFoundMessage)
 	}
 
 	return ctx.Render(http.StatusOK, "orderProduct", product)
@@ -73,7 +73,7 @@ func GetOrderByIdHandler(ctx echo.Context) (error) {
 	order, err = repositories.GetOrderById(id)
 	if err != nil {
 		notFoundMessage := fmt.Sprintf("No order match with id %d", id)
-		return echo.NewHTTPError(http.StatusInternalServerError, notFoundMessage)
+		return echo.NewHTTPError(http.StatusNotFound, notFoundMessage)
 	}
 		
 	return ctx.Render(http.StatusOK, "orderDetail", order)
@@ -83,7 +83,7 @@ func DeleteOrderByIdHandler(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		notFoundMessage := fmt.Sprintf("No order match with id %d", id)
-		return echo.NewHTTPError(http.StatusBadRequest, notFoundMessage)
+		return echo.NewHTTPError(http.StatusNotFound, notFoundMessage)
 	}
 	
 	err = repositories.DeleteOrderById(id)

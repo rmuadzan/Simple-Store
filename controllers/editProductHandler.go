@@ -18,7 +18,7 @@ func EditProductHandler(ctx echo.Context) error {
 	product, err := repositories.GetProductById(id)
 	if err != nil {
 		notFoundMessage := fmt.Sprintf("No product match with id %d", id)
-		return echo.NewHTTPError(http.StatusInternalServerError, notFoundMessage)
+		return echo.NewHTTPError(http.StatusNotFound, notFoundMessage)
 	}
 
 	return ctx.Render(http.StatusOK, "editProduct", product)

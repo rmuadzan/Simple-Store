@@ -75,7 +75,7 @@ func GetUserClaimsFromContext(ctx echo.Context) (*models.UserClaims) {
 }
 
 func GetJwtTokenFromCookies(ctx echo.Context) (string, bool) {
-	value, err := models.GetCookie(ctx, "jwt")
+	value, err := GetCookie(ctx, "jwt")
 	if err != nil {
 		return "", false
 	}

@@ -4,12 +4,8 @@ import (
 	"context"
 	"html/template"
 	"io"
-	"net/http"
-	"os"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/gorilla/securecookie"
-	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 )
 
@@ -63,49 +59,3 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 	return cv.Validator.Struct(i)
 }
 
-// ECHO SECURE COOKIE
-var _ = godotenv.Load()
-var hashKey = os.Getenv("COOKIE_HASH_KEY")
-var blockKey = os.Getenv("COOKIE_BLOCK_KEY")
-var sc = securecookie.New([]byte(hashKey), []byte(blockKey))
-
-func SetCookie(ctx echo.Context, name string, data interface{}) error {
-	encodedValue, err := sc.Encode(name, data)
-	if err != nil {
-		return err
-	}
-
-	c := new(http.Cookie)
-	c.Name = "jwt"
-	c.Value = encodedValue
-	c.Path = "/"
-	c.Secure = false
-	c.HttpOnly = true
-
-	ctx.SetCookie(c)
-	return nil
-}
-
-func GetCookie(ctx echo.Context, name string) (string, error) {
-	c, err := ctx.Cookie(name)
-	if err != nil {
-		return "", err
-	}
-
-	var decodedValue string
-	err = sc.Decode(name, c.Value, &decodedValue)
-	return decodedValue, err
-}
-
-func DeleteCookie(ctx echo.Context, name string) {
-	c := &http.Cookie{
-		Name:     name,
-		Value:    "",
-		Path:     "/",
-		MaxAge:   -1,
-		HttpOnly: true,
-	}
-
-	ctx.SetCookie(c)
-}
-   

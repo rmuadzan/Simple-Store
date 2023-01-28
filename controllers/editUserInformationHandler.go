@@ -18,7 +18,6 @@ func EditUserInformationHandler(ctx echo.Context) error {
 	var data models.DisplayUserData
 	data.Fullname = user.Fullname
 	data.Username = user.Username
-	data.Email = user.Email
 	data.Gender = user.Gender
 	data.Status = user.Status
 

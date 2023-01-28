@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"simple-catalog-v2/models"
 	"simple-catalog-v2/repositories"
 
 	"github.com/labstack/echo/v4"
@@ -34,7 +33,7 @@ func AuthUserHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	if err := models.SetCookie(ctx, "jwt", token); err != nil {
+	if err := repositories.SetCookie(ctx, "jwt", token); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 

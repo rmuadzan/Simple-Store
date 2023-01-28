@@ -34,11 +34,6 @@ func UpdateUserInformationHandler(ctx echo.Context) error {
 	if err := ctx.Bind(&user); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-	// user.Fullname=ctx.FormValue("fullname")
-	// user.Username=ctx.FormValue("username")
-	// user.Email=ctx.FormValue("email")
-	// user.Gender=ctx.FormValue("gender")
-	// user.Status=ctx.FormValue("status")
 	
 	if user.Status != "user" && user.Status != "store" {
 		return ctx.Redirect(http.StatusSeeOther, "/profile/edit")
@@ -51,17 +46,14 @@ func UpdateUserInformationHandler(ctx echo.Context) error {
 
 	claims, err := repositories.GenerateUserClaims(userInfo.Id, user.Fullname, user.Status)
 	if err != nil {
-				return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	token, err := repositories.GenerateUserToken(claims)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	c := &http.Cookie{}
-	c.Name = "jwt"
-	c.Value = token
-	ctx.SetCookie(c)
+	repositories.SetCookie(ctx, "jwt", token)
 
 	GetUserInformationHandler(ctx)
 	return nil

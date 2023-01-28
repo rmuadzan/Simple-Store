@@ -43,7 +43,7 @@ func GetProductByIdHandler(ctx echo.Context) error {
 	product, err := repositories.GetProductById(id)
 	if err != nil {
 		notFoundMessage := fmt.Sprintf("No product match with id %d", id)
-		return echo.NewHTTPError(http.StatusInternalServerError, notFoundMessage)
+		return echo.NewHTTPError(http.StatusNotFound, notFoundMessage)
 	}
 	if userInfo.Id == product.UserID  || userInfo.Status == "admin" {
 		data.IsOwner = true
@@ -58,7 +58,7 @@ func UpdateProductByIdHandler(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		notFoundMessage := fmt.Sprintf("No product match with id %d", id)
-		return echo.NewHTTPError(http.StatusInternalServerError, notFoundMessage)
+		return echo.NewHTTPError(http.StatusNotFound, notFoundMessage)
 	}
 
 	data := new(models.Product)
@@ -79,7 +79,7 @@ func DeleteProductByIdHandler(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		notFoundMessage := fmt.Sprintf("No product match with id %d", id)
-		return echo.NewHTTPError(http.StatusInternalServerError, notFoundMessage)
+		return echo.NewHTTPError(http.StatusNotFound, notFoundMessage)
 	}
 	
 	err = repositories.DeleteProductById(id)
