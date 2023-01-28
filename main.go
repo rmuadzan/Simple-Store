@@ -18,17 +18,7 @@ func main() {
 	e.HTTPErrorHandler = repositories.ErrorHandler
 	e.Validator = &models.CustomValidator{Validator: validator.New()}
 
-	err := connect.MySqlConnect().AutoMigrate(&models.User{})
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = connect.MySqlConnect().AutoMigrate(&models.Product{})
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = connect.MySqlConnect().AutoMigrate(&models.Images{})
+	err := connect.MySqlConnect().AutoMigrate(&models.User{}, &models.Product{}, &models.Images{}, &models.Order{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,12 +41,16 @@ func main() {
 	e.GET("/products", controllers.AllProductsHandler)
 	e.GET("/my-products", controllers.UserProductsHandler)
 	e.POST("/my-products", controllers.CreateProductHandler)
-	e.GET("/my-cart", nil)
+	e.GET("/my-order", controllers.UserOrderHandler)
+	e.POST("/my-order", controllers.OrderProductHandler)
+	e.GET("/my-order/:id", controllers.GetOrderByIdHandler)
+	e.POST("/my-order/:id/delete", controllers.DeleteOrderByIdHandler)
 	e.GET("/products/add", controllers.AddProductHandler)
 	e.GET("/products/:id", controllers.GetProductByIdHandler)
 	e.POST("/products/:id", controllers.UpdateProductByIdHandler)
 	e.GET("/products/:id/edit", controllers.EditProductHandler)
 	e.POST("/products/:id/delete", controllers.DeleteProductByIdHandler)
+	e.GET("/products/:id/order", controllers.AddOrderProduct)
 	e.GET("/search", controllers.SearchProductHandler)
 	e.GET("/profile", controllers.GetUserInformationHandler)
 	e.POST("/profile", controllers.UpdateUserInformationHandler)

@@ -3,6 +3,7 @@ package repositories
 import (
 	"simple-catalog-v2/models"
 
+	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	// "sync"
 )
@@ -186,7 +187,7 @@ func UpdateProductById(data *models.Product) (error) {
 
 func DeleteProductById(id int) error {
 	// _, err := colllection.DeleteOne(context.TODO(), bson.D{{Key: "id", Value: id}})
-	err := db.Debug().Model(&models.Product{}).Delete(&id).Error
+	err := db.Debug().Model(&models.Product{}).Select(clause.Associations).Delete(&models.Product{}, &id).Error
 	return err
 }
 
@@ -228,4 +229,15 @@ func SearchProductByTitle(title string) (*[]*models.Product, error) {
 	err := db.Debug().Model(&models.Product{}).Where("title LIKE ?", titleLike).Find(&result).Error
 
 	return &result, err
+}
+
+func UpdateProductStock(id int, quantity int) error {
+	err := db.Debug().Model(&models.Product{}).Where("id = ?", id).Update("stock", gorm.Expr("stock - ?", quantity)).Error
+	return err
+}
+
+func GetProductStock(id int) (int, error) {
+	var result int
+	err := db.Debug().Model(&models.Product{}).Select("stock").Where("id = ?", id).Find(&result).Error
+	return result, err
 }

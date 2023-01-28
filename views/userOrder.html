@@ -1,0 +1,68 @@
+{{ define "userOrder"}}
+{{ template "_header" }}
+
+    <main>
+      <div class="row my-3 text-center">
+        <h3 class="">----- My Order -----</h3>
+      </div>
+      {{ if lt .Length 1 }}
+        <div class="container-fluid justify-content-center text-center" style="height: 500px;">
+          <div class="row align-items-center" style="height: 400px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="250" height="250" fill="currentColor" class="bi bi-cart-x" viewBox="0 0 16 16">
+              <path d="M7.354 5.646a.5.5 0 1 0-.708.708L7.793 7.5 6.646 8.646a.5.5 0 1 0 .708.708L8.5 8.207l1.146 1.147a.5.5 0 0 0 .708-.708L9.207 7.5l1.147-1.146a.5.5 0 0 0-.708-.708L8.5 6.793 7.354 5.646z"/>
+              <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg>
+          </div>
+          <div class="row">
+              <p class="fs-3 fst-italic">No order match</p>
+          </div>
+        </div>
+      {{ else }}
+        <div class="row justify-content-center mb-5">
+          {{ range $order := .Orders}}
+            <div class="card mx-1 my-2" style="width: 18rem;">
+              <img src="{{ $order.Product.Thumbnail }}" class="card-img-top img-responsive" alt="..." style="height: 150px;">
+              <div class="card-body pt-1">
+                <div class="row justify-content-lg-center align-items-center" style="height: 85px;">
+                  <div class="col text-center m-0">
+                      <p class="fst-italic mt-0 mb-1 p-0">Quantity : {{ $order.Quantity }} </p>
+                      <h4 class="justify-content-center mt-0 p-0">$ {{ $order.TotalPrice }}</h4>
+                  </div>
+                  <div class="col text-center" style="overflow: hidden;">
+                    <div class="card-title mt-0 d-inline-block text-capitalize overflow-wrap" style="height: 40px;">
+                      {{ if eq $order.Status "cart" }}
+                      <p class="col-2 btn btn-warning mx-2" style="width: auto; height:40px; display: inline-block;">Cart
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                          <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>
+                      <p> 
+                      {{ else }}
+                      <p class="col-2 btn btn-success mx-2" style="width: auto; height:40px; display: inline-block;">Paid
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-check" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                        </svg>
+                      <p>
+                      {{ end }}
+                    </div>
+                    <div class="card-title mt-0 d-inline-block text-capitalize overflow-wrap" style="height: 40px;">{{ $order.Product.Title }}</div>
+                  </div>
+                </div>
+                <div class="row">
+                  <a href="my-order/{{ $order.Id }}" class="btn btn-primary d-inline-block mt-auto">See Order</a>
+                </div>
+              </div>
+            </div>
+          {{ end }}
+        </div>
+
+        <section class="mb-3 d-flex flex-column mt-auto">
+          <div class="row row-cols-auto justify-content-center mx-2">
+
+          </div>
+        </section>
+      {{ end }}
+    </main>
+
+{{ template "_footer"}}
+{{ end }}

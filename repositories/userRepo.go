@@ -34,6 +34,6 @@ func UpdateUser(id int, data *models.DisplayUserData) error {
 	// defer update.Close()
 
 	// _, err = update.Exec(data.Fullname, data.Username, data.Email, data.Gender, data.Status, id)
-	err := db.Debug().Model(&models.User{}).Select("fullname", "username", "email", "gender", "status").Where("id = ?", id).Updates(data).Error
+	err := db.Debug().Model(&models.User{}).Select("fullname", "username", "gender", "status").Where("id = ?", id).Updates(data).Error
 	return err
 }
