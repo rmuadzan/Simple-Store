@@ -11,16 +11,16 @@ Install the project dependencies
 ```
 
 After that, make a .env file that contain this variable :
-APPLICATION_NAME=Simple Store
-MONGO_URI
-MYSQL_HOST
-MYSQL_USER
-MYSQL_PASSWORD
-MYSQL_DB
-MYSQL_PORT
-JWT_SIGNATURE_KEY
-COOKIE_HASH_KEY
-COOKIE_BLOCK_KEY
+- APPLICATION_NAME=Simple Store
+- MONGO_URI
+- MYSQL_HOST
+- MYSQL_USER
+- MYSQL_PASSWORD
+- MYSQL_DB
+- MYSQL_PORT
+- JWT_SIGNATURE_KEY
+- COOKIE_HASH_KEY
+- COOKIE_BLOCK_KEY
 
 Then run following command to store dummy product in your database:
 ```bash
