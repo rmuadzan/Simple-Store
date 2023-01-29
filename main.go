@@ -1,7 +1,9 @@
 package main
 
 import (
+	"flag"
 	"log"
+	"os"
 	"simple-catalog-v2/connect"
 	"simple-catalog-v2/controllers"
 	"simple-catalog-v2/middlewares"
@@ -10,23 +12,14 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
+	"github.com/urfave/cli"
 )
 
-func main() {
+func runServer() {
 	e := echo.New()
 	e.Renderer = repositories.NewRenderer("views/*.html", true)
 	e.HTTPErrorHandler = repositories.ErrorHandler
 	e.Validator = &models.CustomValidator{Validator: validator.New()}
-
-	err := connect.MySqlConnect().AutoMigrate(&models.User{}, &models.Product{}, &models.Images{}, &models.Order{})
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// err = PopulateProduct()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 
 	e.Use(middlewares.MiddlewareContextValue)
 	e.Use(middlewares.MiddlewareJWTAuthorization)
@@ -58,4 +51,43 @@ func main() {
 	e.GET("/about", controllers.AboutHandler)
 
 	e.Logger.Fatal(e.Start(":8080"))
+}
+
+func main() {
+	// CLI COMMAND
+	flag.Parse()
+	arg := flag.Arg(0)
+	if arg != "" {
+		cmdApp := cli.NewApp()
+		cmdApp.Commands = []cli.Command{
+			{
+				Name: "db:migrate",
+				Action: func (c *cli.Context) error {
+					err := connect.MySqlConnect().AutoMigrate(&models.User{}, &models.Product{}, &models.Images{}, &models.Order{})
+					if err != nil {
+						log.Fatal(err)
+					}
+					return nil
+				},
+			},
+			{
+				Name: "db:populate",
+				Action: func (c *cli.Context) error {
+					err := repositories.PopulateProduct()
+					if err != nil {
+						log.Fatal(err)
+					}
+					err = repositories.PopulateStore()
+					if err != nil {
+						log.Fatal(err)
+					}
+					return nil
+				},
+			},
+		}
+
+		cmdApp.Run(os.Args)
+	} else {
+		runServer()
+	}
 }

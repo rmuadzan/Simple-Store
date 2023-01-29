@@ -11,7 +11,7 @@ type User struct {
 	Password       string    `json:"password" form:"password" validate:"required" gorm:"size:100;not null"`
 	Status         string    `json:"status" form:"status" validate:"required" gorm:"size:10;not null;default:'user'"`
 	Avatar         string    `json:"avatar" form:"avatar" gorm:"size:150;not null"`
-	RefreshToken   string    `json:"refreshToken" form:"refreshToken" gorm:"size:20"`
+	RefreshToken   string    `json:"refreshToken" form:"refreshToken" gorm:"size:200"`
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {  
