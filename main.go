@@ -34,6 +34,12 @@ func main() {
 
 	e.GET("/", controllers.IndexHandler)
 	e.GET("/login", controllers.LoginHandler)
+	e.GET("/forget-password", controllers.ForgetPasswordHandler)
+	e.POST("/forget-password", controllers.UpdateUserPassword)
+	e.GET("/forget-password/confirm", controllers.ForgetPasswordTokenHandler)
+	e.POST("/forget-password/confirm", controllers.CreateRefreshTokenHandler)
+	e.GET("/forget-password/change", controllers.ChangePasswordHandler)
+	e.POST("/forget-password/change", controllers.ValidateRefreshToken)
 	e.GET("/signup", controllers.SignUpPage)
 	e.POST("/signup", controllers.SignUpHandler)
 	e.POST("/auth", controllers.AuthUserHandler)

@@ -9,7 +9,7 @@ import (
 
 func MiddlewareJWTAuthorization(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
-		if ctx.Path() == "/login" || ctx.Path() == "/signup" || ctx.Path() == "/auth" || ctx.Path() == "/logout" {
+		if ctx.Path() == "/login" || ctx.Path() == "/signup" || ctx.Path() == "/auth" || ctx.Path() == "/logout" || ctx.Path() == "/forget-password" || ctx.Path() == "/forget-password/confirm" || ctx.Path() == "/forget-password/change" {
 			return next(ctx)
 		}
 

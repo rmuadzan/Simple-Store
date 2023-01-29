@@ -3,6 +3,8 @@ package repositories
 import (
 	"simple-catalog-v2/connect"
 	"simple-catalog-v2/models"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 var db = connect.MySqlConnect()
@@ -35,5 +37,26 @@ func UpdateUser(id int, data *models.DisplayUserData) error {
 
 	// _, err = update.Exec(data.Fullname, data.Username, data.Email, data.Gender, data.Status, id)
 	err := db.Debug().Model(&models.User{}).Select("fullname", "username", "gender", "status").Where("id = ?", id).Updates(data).Error
+	return err
+}
+
+func SetUserRefreshToken(email string, token string) error {
+	err := db.Debug().Model(&models.User{}).Where("Email = ?", email).Update("refresh_token", token).Error
+	return err
+}
+
+func GetUserRefreshToken(email string) (string, error) {
+	var token string
+	err := db.Debug().Model(&models.User{}).Select("refresh_token").Where("Email = ?", email).Find(&token).Error
+	return token, err
+}
+
+func SetUserPassword(email string, password string) error {
+	pass, err := bcrypt.GenerateFromPassword([]byte(password), 8)
+	if err != nil { 
+		return err
+	}
+
+	err = db.Debug().Model(&models.User{}).Where("Email = ?", email).Update("password", string(pass)).Error
 	return err
 }

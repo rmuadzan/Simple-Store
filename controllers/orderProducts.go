@@ -75,6 +75,19 @@ func OrderProductHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
+	userInfo, err := repositories.GetUserInfoByEmailOrId("", data.UserID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	mailMessage := fmt.Sprintf("Hello, %s<br>Your purchase with $%f total payment has been successfully made", userInfo.Fullname, data.TotalPrice)
+	if data.Status == "paid" {
+		err := repositories.SendMail(userInfo.Email, "Purchase Note", mailMessage)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
+	}
+
 	UserOrderHandler(ctx)
 	return nil
 } 
