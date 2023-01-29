@@ -1,5 +1,5 @@
 # Simple-Store
-This website is built using golang with echo framework.
+This website is built using golang with echo framework and mysql database with gorm.
 
 
 ## Installation
@@ -20,11 +20,16 @@ After that, make a .env file that contain this variable :
 - MYSQL_PORT
 - JWT_SIGNATURE_KEY
 - COOKIE_HASH_KEY
-- COOKIE_BLOCK_KEY
+- COOKIE_BLOCK_KEY (16/24/32 bytes length)
 
-Then run following command to store dummy product in your database:
+Then run following command to migrate models to your database:
 ```bash
-  go run populate.go
+  go run main.go db:migrate
+```
+
+And tnen run following command to store dummy product in your database:
+```bash
+  go run main.go db:populate
 ```
     
 ## Running App
