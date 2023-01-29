@@ -73,11 +73,11 @@ func main() {
 			{
 				Name: "db:populate",
 				Action: func (c *cli.Context) error {
-					err := repositories.PopulateProduct()
+					err := repositories.PopulateStore()
 					if err != nil {
 						log.Fatal(err)
 					}
-					err = repositories.PopulateStore()
+					err = repositories.PopulateProduct()
 					if err != nil {
 						log.Fatal(err)
 					}

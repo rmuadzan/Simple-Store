@@ -126,10 +126,10 @@ func PopulateStore() error {
 		},
 	}
 
+	var err error
 	for _, store := range Stores {
-		err := CreateUser(store)
-		return err
+		err = CreateUser(store)
 	}
 	
-	return nil
+	return err
 }
