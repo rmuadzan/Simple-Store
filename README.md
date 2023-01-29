@@ -27,7 +27,7 @@ Then run following command to migrate models to your database:
   go run main.go db:migrate
 ```
 
-And tnen run following command to store dummy product in your database:
+And then run following command to store dummy product in your database:
 ```bash
   go run main.go db:populate
 ```
