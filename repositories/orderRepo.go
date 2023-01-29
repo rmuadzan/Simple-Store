@@ -18,7 +18,7 @@ func GetUserOrders(userID int, page int, perPage int) (*[]*models.Order, int, er
 		return nil, 0, err
 	}
 
-	err = db.Debug().Model(&models.Order{}).Where("user_id = ?", userID).Preload("Product").Limit(perPage).Offset(skip).Find(&result).Error
+	err = db.Debug().Model(&models.Order{}).Where("user_id = ?", userID).Preload(clause.Associations).Omit("User.Password").Limit(perPage).Offset(skip).Find(&result).Error
 	if err != nil {
 		return nil, 0, err
 	}

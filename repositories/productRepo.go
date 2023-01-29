@@ -5,8 +5,8 @@ import (
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
-	// "sync"
 )
+
 
 // func getProductCount() (int, error) {
 // 	count, err := colllection.CountDocuments(context.TODO(), bson.D{})
@@ -75,7 +75,7 @@ func GetAllProducts(page int, perPage int) (*[]*models.Product, int, error) {
 		return nil, 0, err
 	}
 
-	err = db.Debug().Model(&models.Product{}).Limit(perPage).Offset(skip).Find(&result).Error
+	err = db.Debug().Model(&models.Product{}).Preload("User").Omit("User.Password").Limit(perPage).Offset(skip).Find(&result).Error
 
 	return &result, int(count), err
 }
@@ -111,7 +111,7 @@ func GetUserProducts(userID int, page int, perPage int) (*[]*models.Product, int
 		return nil, 0, err
 	}
 
-	err = db.Debug().Model(&models.Product{}).Where("user_id = ?", userID).Limit(perPage).Offset(skip).Find(&result).Error
+	err = db.Debug().Model(&models.Product{}).Where("user_id = ?", userID).Preload("User").Omit("User.Password").Limit(perPage).Offset(skip).Find(&result).Error
 	if err != nil {
 		return nil, 0, err
 	}

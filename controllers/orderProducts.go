@@ -47,7 +47,6 @@ func UserOrderHandler(ctx echo.Context) error {
 		CurrentPage: page,
 	})
 
-
 	data := struct{
 		Orders *[]*models.Order
 		Length int

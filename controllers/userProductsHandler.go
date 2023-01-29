@@ -30,28 +30,14 @@ func UserProductsHandler(ctx echo.Context) error {
 		CurrentPage: page,
 	})
 
-	productsDataSlice := []*models.DisplayProductData{}
-	for i := 0; i < len(*products); i++ {
-		var product models.DisplayProductData
-		user, _ := repositories.GetUserInfoByEmailOrId("", (*products)[i].UserID)
-		product.Id = (*products)[i].Id
-		product.Thumbnail = (*products)[i].Thumbnail
-		product.Price = (*products)[i].Price
-		product.FPrice = (*products)[i].FPrice
-		product.DiscountPercentage = (*products)[i].DiscountPercentage
-		product.Title = (*products)[i].Title
-		product.StoreName = user.Fullname
-		productsDataSlice = append(productsDataSlice, &product)
-	}
-
 	data := struct{
-		Products *[]*models.DisplayProductData
+		Products *[]*models.Product
 		Length int
 		UserStatus string
 		Pagination models.PaginationLinks
 	}{}
 
-	data.Products = &productsDataSlice
+	data.Products = products
 	data.Length = len(*products)
 	data.UserStatus = userInfo.Status
 	data.Pagination = pagination
