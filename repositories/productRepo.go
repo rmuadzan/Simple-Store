@@ -106,7 +106,7 @@ func GetUserProducts(userID int, page int, perPage int) (*[]*models.Product, int
 	// 	return nil, err
 	// }
 
-	err := db.Debug().Model(&models.Product{}).Count(&count).Error
+	err := db.Debug().Model(&models.Product{}).Where("user_id = ?", userID).Count(&count).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -165,7 +165,7 @@ func CreateProduct(data *models.Product) (error) {
 	return err
 }
 
-func UpdateProductById(data *models.Product) (error) {
+func UpdateProduct(data *models.Product, userID int) (error) {
 	// thumbnail := data.Thumbnail
 	// if thumbnail == "" {
 	// 	thumbnail = "https://propertywiselaunceston.com.au/wp-content/themes/property-wise/images/no-image.png"
@@ -189,13 +189,13 @@ func UpdateProductById(data *models.Product) (error) {
     // }}
 
 	// _, err := colllection.UpdateOne(context.TODO(), bson.D{{Key: "id", Value: data.Id}}, update)
-	err := db.Debug().Model(&models.Product{}).Where("id = ?", data.Id).Updates(&data).Error
+	err := db.Debug().Model(&models.Product{}).Where("id = ? AND user_id", data.Id, userID).Updates(&data).Error
 	return err
 }
 
-func DeleteProductById(id int) error {
+func DeleteProduct(id int, userID int) error {
 	// _, err := colllection.DeleteOne(context.TODO(), bson.D{{Key: "id", Value: id}})
-	err := db.Debug().Model(&models.Product{}).Select(clause.Associations).Delete(&models.Product{}, &id).Error
+	err := db.Debug().Model(&models.Product{}).Select(clause.Associations).Where("user_id = ?", userID).Delete(&models.Product{}, &id).Error
 	return err
 }
 

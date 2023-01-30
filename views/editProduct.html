@@ -41,7 +41,7 @@
     {{ range $i, $image := .Images }}
       <div class="col-6">
         <label for="inputImage{{$i}}" class="form-label">Image {{ ($i) }}</label>
-        <input type="text" class="form-control" id="inputImage{{$i}}" name="images" value="{{ $image }}">
+        <input type="text" class="form-control" id="inputImage{{$i}}" name="images" value="{{ $image.Link }}">
       </div>
     {{ end }}
     <div class="col-12 text-center">

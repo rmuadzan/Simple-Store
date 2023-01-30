@@ -13,7 +13,7 @@ func GetUserOrders(userID int, page int, perPage int) (*[]*models.Order, int, er
 	var count int64
 	skip := (page - 1) * perPage
 
-	err := db.Debug().Model(&models.Order{}).Count(&count).Error
+	err := db.Debug().Model(&models.Order{}).Where("user_id = ?", userID).Count(&count).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -34,10 +34,10 @@ func CreateOrder(data *models.Order) error {
 	return err
 }
 
-func GetOrderById(id int) (models.Order, error) {
+func GetOrder(id int, userID int) (models.Order, error) {
 	var result models.Order
 
-	err := db.Debug().Model(&models.Order{}).Preload(clause.Associations).Preload("Product.Images").Where("id = ?", id).Find(&result).Error
+	err := db.Debug().Model(&models.Order{}).Preload(clause.Associations).Preload("Product.Images").Where("user_id = ?", userID).First(&result, id).Error
 	if err != nil {
 		return result, err
 	}
@@ -45,8 +45,8 @@ func GetOrderById(id int) (models.Order, error) {
 	return result, nil
 }
 
-func DeleteOrderById(id int) error {
-	err := db.Debug().Model(&models.Order{}).Delete(&models.Order{}, &id).Error
+func DeleteOrder(id int, userID int) error {
+	err := db.Debug().Model(&models.Order{}).Where("user_id = ?", userID).Delete(&models.Order{}, &id).Error
 	return err
 }
 
