@@ -9,6 +9,16 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// GET "/signup"
+func SignUpPage(ctx echo.Context) error {
+	if _, err := ctx.Cookie("jwt"); err == nil {
+		return ctx.Redirect(http.StatusSeeOther, "/")
+	}
+	
+	return ctx.Render(http.StatusOK, "signup", nil)
+}
+
+// POST "/signup"
 func SignUpHandler(ctx echo.Context) error {
 	var user models.User
 
@@ -37,10 +47,3 @@ func SignUpHandler(ctx echo.Context) error {
 	return nil
 }
 
-func SignUpPage(ctx echo.Context) error {
-	if _, err := ctx.Cookie("jwt"); err == nil {
-		return ctx.Redirect(http.StatusSeeOther, "/")
-	}
-	
-	return ctx.Render(http.StatusOK, "signup", nil)
-}

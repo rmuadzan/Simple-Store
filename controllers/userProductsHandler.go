@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GET "/my-products"
 func UserProductsHandler(ctx echo.Context) error {
 	userInfo := repositories.GetUserClaimsFromContext(ctx)
 
@@ -43,4 +44,20 @@ func UserProductsHandler(ctx echo.Context) error {
 	data.Pagination = pagination
 
 	return ctx.Render(http.StatusOK, "userProducts", data)
+}
+
+// POST "/my-products"
+func CreateProductHandler(ctx echo.Context) error {
+	data := new(models.Product)
+	if err := ctx.Bind(data); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	data.UserID = repositories.GetUserClaimsFromContext(ctx).Id
+
+	if err := repositories.CreateProduct(data); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	UserProductsHandler(ctx)
+	return nil
 }

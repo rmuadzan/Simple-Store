@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GET "products"
 func AllProductsHandler(ctx echo.Context) error {
 	page, _ := strconv.Atoi(ctx.QueryParam("page"))
 	if page <= 0 {
@@ -42,4 +43,9 @@ func AllProductsHandler(ctx echo.Context) error {
 	data.Pagination = pagination
 
 	return ctx.Render(http.StatusOK, "allProducts", data)
+}
+
+// GET "products/add"
+func AddProductHandler(ctx echo.Context) error {
+	return ctx.Render(http.StatusOK, "addProduct", nil)
 }

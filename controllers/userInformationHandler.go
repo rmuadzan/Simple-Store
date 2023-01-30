@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GET "/profile"
 func GetUserInformationHandler(ctx echo.Context) error {
 	userInfo := repositories.GetUserClaimsFromContext(ctx)
 
@@ -27,6 +28,7 @@ func GetUserInformationHandler(ctx echo.Context) error {
 	return ctx.Render(http.StatusOK, "userInformation", data)
 }
 
+// POST "/profile"
 func UpdateUserInformationHandler(ctx echo.Context) error {
 	userInfo := repositories.GetUserClaimsFromContext(ctx)
 	var user models.DisplayUserData
@@ -57,4 +59,21 @@ func UpdateUserInformationHandler(ctx echo.Context) error {
 
 	GetUserInformationHandler(ctx)
 	return nil
+}
+
+// GET "/profile/edit"
+func EditUserInformationHandler(ctx echo.Context) error {
+	userInfo := repositories.GetUserClaimsFromContext(ctx)
+	user, err := repositories.GetUserInfoByEmailOrId("", userInfo.Id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	var data models.DisplayUserData
+	data.Fullname = user.Fullname
+	data.Username = user.Username
+	data.Gender = user.Gender
+	data.Status = user.Status
+
+	return ctx.Render(http.StatusOK, "editProfile", data)
 }

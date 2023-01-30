@@ -10,22 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func AddOrderProduct(ctx echo.Context) error {
-	id, err := strconv.Atoi(ctx.Param("id"))
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-	
-	product, err := repositories.GetProductById(id)
-	if err != nil {
-		notFoundMessage := fmt.Sprintf("No product match with id %d", id)
-		return echo.NewHTTPError(http.StatusNotFound, notFoundMessage)
-	}
-
-	return ctx.Render(http.StatusOK, "orderProduct", product)
-}
-
-// Get /my-order
+// Get "/my-orders"
 func UserOrderHandler(ctx echo.Context) error {
 	userInfo := repositories.GetUserClaimsFromContext(ctx)
 
@@ -41,7 +26,7 @@ func UserOrderHandler(ctx echo.Context) error {
 	}
 
 	pagination, _ := repositories.GetPaginationLinks(models.PaginationParams{
-		Path:        "my-order",
+		Path:        "my-orders",
 		TotalRows:   totalRows,
 		PerPage:     perPage,
 		CurrentPage: page,
@@ -62,7 +47,7 @@ func UserOrderHandler(ctx echo.Context) error {
 	return ctx.Render(http.StatusOK, "userOrder", data)
 }
 
-// Post /my-order
+// Post "/my-orders"
 func OrderProductHandler(ctx echo.Context) error {
 	data := new(models.Order)
 	if err := ctx.Bind(data); err != nil {
@@ -78,6 +63,7 @@ func OrderProductHandler(ctx echo.Context) error {
 	return nil
 } 
 
+// GET "my-orders/:id"
 func GetOrderByIdHandler(ctx echo.Context) (error) {
 	var order models.Order
 	id, err := strconv.Atoi(ctx.Param("id"))
@@ -85,7 +71,8 @@ func GetOrderByIdHandler(ctx echo.Context) (error) {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	order, err = repositories.GetOrderById(id)
+	userInfo := repositories.GetUserClaimsFromContext(ctx)
+	order, err = repositories.GetOrder(id, userInfo.Id)
 	if err != nil {
 		notFoundMessage := fmt.Sprintf("No order match with id %d", id)
 		return echo.NewHTTPError(http.StatusNotFound, notFoundMessage)
@@ -94,17 +81,18 @@ func GetOrderByIdHandler(ctx echo.Context) (error) {
 	return ctx.Render(http.StatusOK, "orderDetail", order)
 }
 
+// POST "my-orders/:id/delete"
 func DeleteOrderByIdHandler(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		notFoundMessage := fmt.Sprintf("No order match with id %d", id)
-		return echo.NewHTTPError(http.StatusNotFound, notFoundMessage)
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-	
-	err = repositories.DeleteOrderById(id)
+	userInfo := repositories.GetUserClaimsFromContext(ctx)
+
+	err = repositories.DeleteOrder(id, userInfo.Id)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return ctx.Redirect(http.StatusSeeOther, "/my-order")
+	return ctx.Redirect(http.StatusSeeOther, "/my-orders")
 }

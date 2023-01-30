@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GET "/search"
 func SearchProductHandler(ctx echo.Context) error {
 	title := ctx.QueryParam("title")
 	page, _ := strconv.Atoi(ctx.QueryParam("page"))
